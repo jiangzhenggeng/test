@@ -6,6 +6,46 @@
 </head>
 <body>
 <script>
+
+	//扁平化数组
+	function formatData(arr, pid = 0) {
+		let result = []
+		arr.forEach((item) => {
+			result.push({
+				label: item.label,
+				value: item.value,
+				pid: pid
+			})
+			if (({}).toString.call(item.children) === '[object Array]') {
+				//地柜处理 children 链接返回的结果
+				result = result.concat(formatData(item.children, item.value))
+			}
+		})
+		return result
+	}
+
+	//更具目标值查找地址
+	function getResult(formatDaraArray, targetValue) {
+		//把数组处理成目标值
+		//如 [1,2,3] 目标值是3
+		if (({}).toString.call(targetValue) === '[object Array]') {
+			targetValue = targetValue[targetValue.length - 1]
+		}
+		let result = []
+		//由于数据已经扁平化啦，这里就可以一次循环查找
+		formatDaraArray.forEach((item) => {
+			if (item.value == targetValue) {
+				//由于是反向查找的，所以unshift讲找到的数据添加在结果的头部
+				result.unshift(item)
+				if (item.pid) {
+					//同理 由于是反向查找的，所以unshift讲找到的数据添加在结果的头部
+					result.unshift(...getResult(formatDaraArray, item.pid))
+				}
+			}
+		})
+		return result
+	}
+
 	var json = [
 		{
 			label: '北京市',
@@ -49,57 +89,8 @@
 		}
 	]
 
-	let cache_data = {
-		array: [],
-		currentid: 0
-	}
-
-	//扁平化数组
-	function formatData(arr, pid) {
-		let result = []
-		arr.forEach((item) => {
-			result.push({
-				label: item.label,
-				value: item.value,
-				pid: pid
-			})
-			if (({}).toString.call(item.children) === '[object Array]') {
-				//地柜处理 children 链接返回的结果
-				result = result.concat(formatData(item.children, item.value))
-			}
-		})
-		return result
-	}
-
-	let formatDaraArray = formatData(json, 0)
-
-	console.log(formatDaraArray)
-
-  //更具目标值查找地址
-	function getResult(formatDaraArray, targetValue) {
-		//把数组处理成目标值
-    //如 [1,2,3] 目标值是3
-		if (({}).toString.call(targetValue) === '[object Array]') {
-			targetValue = targetValue[targetValue.length - 1]
-		}
-		let result = []
-    //由于数据已经扁平化啦，这里就可以一次循环查找
-		formatDaraArray.forEach((item) => {
-			if (item.value == targetValue) {
-				//由于是反向查找的，所以unshift讲找到的数据添加在结果的头部
-				result.unshift(item)
-				if (item.pid) {
-					//同理 由于是反向查找的，所以unshift讲找到的数据添加在结果的头部
-					result.unshift(...getResult(formatDaraArray, item.pid))
-				}
-			}
-		})
-		return result
-	}
-
-	let put = 10000
-
-	console.log(getResult(formatDaraArray, put))
+	let result = getResult(formatData(json), 10000)
+	console.log(result)
 
 
 </script>
