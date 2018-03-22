@@ -6,6 +6,7 @@
 </head>
 <body>
 <input id="input-value" value="10000">
+<button id="find-value">查找</button>
 <div id="find-result"></div>
 <script>
 
@@ -91,8 +92,8 @@
 		}
 	]
 
-	document.getElementById('input-value').addEventListener('change', function (e) {
-		let targetValue = parseInt(e.currentTarget.value)
+	document.getElementById('find-value').addEventListener('click', function (e) {
+		let targetValue = parseInt(document.getElementById('find-value').value)
 		if (!isNaN(targetValue)) {
 			let result = getResult(formatData(json), targetValue)
 			document.getElementById('find-result').innerHTML = result.toString()
