@@ -96,7 +96,7 @@
 		let targetValue = parseInt(document.getElementById('input-value').value)
 		if (!isNaN(targetValue)) {
 			let result = getResult(formatData(json), targetValue)
-			document.getElementById('find-result').innerHTML = result.toString()
+			document.getElementById('find-result').innerHTML = JSON.stringify(result)
 		}
 	}, false)
 </script>
