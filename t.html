@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script>
+	var json = [
+		{
+			label: '北京市',
+			value: 1,
+			children: [
+				{
+					label: '海淀区',
+					value: 10,
+					children: [
+						{
+							label: '街道100',
+							value: 100
+						},
+						{
+							label: '街道1000',
+							value: 1000
+						},
+						{
+							label: '街道10000',
+							value: 10000
+						}
+					]
+				}
+			]
+		},
+		{
+			label: '2北京市',
+			value: 2,
+			children: [
+				{
+					label: '2海淀区',
+					value: 20,
+					children: [
+						{
+							label: '2街道',
+							value: 200
+						}
+					]
+				}
+			]
+		}
+	]
+
+	let cache_data = {
+		array: [],
+		currentid: 0
+	}
+
+	function formatData(arr, pid) {
+		let result = []
+		arr.forEach((item) => {
+			result.push({
+				label: item.label,
+				value: item.value,
+				pid: pid
+			})
+			if (({}).toString.call(item.children) === '[object Array]') {
+				result = result.concat(formatData(item.children, item.value))
+			}
+		})
+		return result
+	}
+
+	let formatDaraArray = formatData(json, 0)
+
+	console.log(formatDaraArray)
+
+	function getResult(formatDaraArray, targetValue) {
+		if (({}).toString.call(targetValue) === '[object Array]') {
+			targetValue = targetValue[targetValue.length - 1]
+		}
+		let result = []
+		formatDaraArray.forEach((item) => {
+			if (item.value == targetValue) {
+				result.unshift(item)
+				if (item.pid) {
+					result.unshift(...getResult(formatDaraArray, item.pid))
+				}
+			}
+		})
+		return result
+	}
+
+	let put = 10000
+
+	console.log(getResult(formatDaraArray, put))
+
+
+</script>
+
+</body>
+</html>
