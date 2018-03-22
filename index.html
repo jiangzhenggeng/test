@@ -92,8 +92,8 @@
 		}
 	]
 
-	document.getElementById('find-value').addEventListener('click', function (e) {
-		let targetValue = parseInt(document.getElementById('find-value').value)
+	document.getElementById('find-value').addEventListener('click', function () {
+		let targetValue = parseInt(document.getElementById('input-value').value)
 		if (!isNaN(targetValue)) {
 			let result = getResult(formatData(json), targetValue)
 			document.getElementById('find-result').innerHTML = result.toString()
