@@ -5,6 +5,8 @@
   <title>Title</title>
 </head>
 <body>
+<input id="input-value" value="10000">
+<div id="find-result"></div>
 <script>
 
 	//扁平化数组
@@ -89,10 +91,13 @@
 		}
 	]
 
-	let result = getResult(formatData(json), 10000)
-	console.log(result)
-
-
+	document.getElementById('input-value').addEventListener('change', function (e) {
+		let targetValue = parseInt(e.currentTarget.value)
+		if (!isNaN(targetValue)) {
+			let result = getResult(formatData(json), targetValue)
+			document.getElementById('find-result').innerHTML = result.toString()
+		}
+	}, false)
 </script>
 
 </body>
