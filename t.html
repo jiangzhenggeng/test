@@ -54,6 +54,7 @@
 		currentid: 0
 	}
 
+	//扁平化数组
 	function formatData(arr, pid) {
 		let result = []
 		arr.forEach((item) => {
@@ -63,6 +64,7 @@
 				pid: pid
 			})
 			if (({}).toString.call(item.children) === '[object Array]') {
+				//地柜处理 children 链接返回的结果
 				result = result.concat(formatData(item.children, item.value))
 			}
 		})
@@ -73,15 +75,21 @@
 
 	console.log(formatDaraArray)
 
+  //更具目标值查找地址
 	function getResult(formatDaraArray, targetValue) {
+		//把数组处理成目标值
+    //如 [1,2,3] 目标值是3
 		if (({}).toString.call(targetValue) === '[object Array]') {
 			targetValue = targetValue[targetValue.length - 1]
 		}
 		let result = []
+    //由于数据已经扁平化啦，这里就可以一次循环查找
 		formatDaraArray.forEach((item) => {
 			if (item.value == targetValue) {
+				//由于是反向查找的，所以unshift讲找到的数据添加在结果的头部
 				result.unshift(item)
 				if (item.pid) {
+					//同理 由于是反向查找的，所以unshift讲找到的数据添加在结果的头部
 					result.unshift(...getResult(formatDaraArray, item.pid))
 				}
 			}
